@@ -9,24 +9,36 @@ Listens on IPv4 and IPv6
 
 View demo of Table View at: https://table.ell.today
 
+<br>
+
 ## Default drop down:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/default.jpg)
+
+<br>
 
 ## Selecting a database:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/select-database.jpg)
 
+<br>
+
 ## List of tables inside the database selected:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/table-list.jpg)
+
+<br>
 
 ## Infomation about a table:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/table-info.jpg)
 
+<br>
+
 ## Filtering a table:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/filter-table.jpg)
+
+<br>
 
 For a list of abbreviations and there meanings used throughout this repository please refer to the README at - https://github.com/Ellwould/information_technology_and_telecommunication_abbreviations
