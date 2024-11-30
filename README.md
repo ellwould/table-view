@@ -9,13 +9,23 @@ Listens on IPv4 and IPv6
 
 View demo of Table View at: https://table.ell.today
 
+## Default drop down:
+
 ![image](https://github.com/Ellwould/table-view/blob/main/image/default.jpg)
+
+## Selecting a database:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/select-database.jpg)
 
+## List of tables inside the database selected:
+
 ![image](https://github.com/Ellwould/table-view/blob/main/image/table-list.jpg)
 
+## Infomation about a table:
+
 ![image](https://github.com/Ellwould/table-view/blob/main/image/table-info.jpg)
+
+## Filtering a table:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/filter-table.jpg)
 
