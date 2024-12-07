@@ -1,0 +1,11 @@
+[Unit]
+Description=Table View
+
+[Service]
+User=tableview
+Group=tableview
+Type=simple
+ExecStart=/usr/local/bin/tableview
+
+[Install]
+WantedBy=multi-user.target
