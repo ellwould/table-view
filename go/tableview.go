@@ -361,14 +361,8 @@ func main() {
 		fmt.Fprintf(w, "    <th><a href=\"https://ell.today\" class=\"tableButton\">Written by Elliot Keavney (Click for website)</a></th>")
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "  <tr>")
-		fmt.Fprintf(w, "    <th>MySQL server username: "+dbUsername+"</th>")
-		fmt.Fprintf(w, "  </tr>")
-		fmt.Fprintf(w, "  <tr>")
-		fmt.Fprintf(w, "    <th>MySQL server address: "+dbAddress+"</th>")
-		fmt.Fprintf(w, "  </tr>")
-		fmt.Fprintf(w, "  <tr>")
 		if dbTls == "false" {
-			fmt.Fprintf(w, "<th>The connection between the MySQL server<br>and Table View is not encrypted &#128308</th>")
+			fmt.Fprintf(w, "<th>The connection between the MySQL server<br>and Table View is unencrypted &#128308</th>")
 		} else if dbTls == "true" {
 			fmt.Fprintf(w, "<th>The connection between the MySQL server<br>and Table View is encrypted &#128994</th>")
 		}
