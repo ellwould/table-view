@@ -33,23 +33,23 @@ import (
 	"net/http"
 	"os"
 	"slices"
+	"strconv"
 	"tableviewresource"
 )
 
 // Function to retrieve databases inside MySQL
-func databaseList(dbUsername string, dbPassword string, dbTransport string, dbAddress string, dbPort string) []string {
+func databaseList(dbUsername string, dbPassword string, dbTransport string, dbAddress string, dbPort string, dbTls string) []string {
 
 	// Open database connection
-	dbConnection, err := sql.Open("mysql", dbUsername+":"+dbPassword+"@"+dbTransport+"("+dbAddress+":"+dbPort+")/")
+	dbConnection, err := sql.Open("mysql", dbUsername+":"+dbPassword+"@"+dbTransport+"("+dbAddress+":"+dbPort+")/?tls="+dbTls)
 	defer dbConnection.Close()
 
 	// Error
 	if err != nil {
-		panic("Is the database online?")
+		panic("Function databaseList: Is the database online?")
 	}
 
 	databaseQuery, err := dbConnection.Query("SHOW DATABASES WHERE `Database` NOT IN ('mysql', 'performance_schema', 'information_schema', 'sys');")
-
 	var databaseListResult []string
 
 	for databaseQuery.Next() {
@@ -62,7 +62,6 @@ func databaseList(dbUsername string, dbPassword string, dbTransport string, dbAd
 		if err != nil {
 			panic("Error in database list function")
 		}
-
 		databaseListResult = append(databaseListResult, row)
 	}
 	return databaseListResult
@@ -298,7 +297,7 @@ func main() {
 
 	err := godotenv.Load("/usr/local/etc/tableview-resource/tableview.env")
 	if err != nil {
-		fmt.Println("Error loading tableview.env file for database details")
+		panic("Error loading tableview.env file for database details")
 	}
 
 	//Get the database connection details
@@ -307,8 +306,41 @@ func main() {
 	dbTransport := os.Getenv("dbTransport")
 	dbAddress := os.Getenv("dbAddress")
 	dbPort := os.Getenv("dbPort")
+	dbTls := os.Getenv("dbTls")
 
-	databaseListResult := databaseList(dbUsername, dbPassword, dbTransport, dbAddress, dbPort)
+	//Values allowed for dbTransport Variable
+	var allowedTransportValue = []string{"tcp", "udp"}
+	validDbTransport := slices.Contains(allowedTransportValue, dbTransport)
+
+	dbPortInt, err := strconv.Atoi(dbPort)
+	if err != nil {
+		panic("DATABASE PORT MUST BE A NUMBER IN /usr/local/etc/tableview-resource/tableview.env")
+	}
+
+	//Values allowed for dbTls Variable
+	var allowedTlsValue = []string{"false", "true"}
+	validDbTls := slices.Contains(allowedTlsValue, dbTls)
+
+	//Catch if any errors were made in tableview.env and feed back where to correct error
+	if dbUsername == "" {
+		panic("DATABASE USERNAME CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if dbPassword == "" {
+		panic("DATABASE PASSOWRD CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if dbTransport == "" {
+		panic("DATABASE TRANSPORT OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if validDbTransport == false {
+		panic("DATABASE TRANSPORT OPTION MUST BE udp OR tcp IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if dbAddress == "" {
+		panic("DATABASE ADDRESS CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if dbPortInt <= 0 || dbPortInt >= 65536 {
+		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65536 IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if dbTls == "" {
+		panic("DATABASE TLS OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+	} else if validDbTls == false {
+		panic("DATABASE TRANSPORT OPTION MUST BE false OR true IN /usr/local/etc/tableview-resource/tableview.env")
+	}
+
+	databaseListResult := databaseList(dbUsername, dbPassword, dbTransport, dbAddress, dbPort, dbTls)
 
 	var startHTML string
 	startHTML = tableviewresource.StartHTML()
@@ -327,6 +359,19 @@ func main() {
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "  <tr>")
 		fmt.Fprintf(w, "    <th><a href=\"https://ell.today\" class=\"tableButton\">Written by Elliot Keavney (Click for website)</a></th>")
+		fmt.Fprintf(w, "  </tr>")
+		fmt.Fprintf(w, "  <tr>")
+		fmt.Fprintf(w, "    <th>MySQL server username: "+dbUsername+"</th>")
+		fmt.Fprintf(w, "  </tr>")
+		fmt.Fprintf(w, "  <tr>")
+		fmt.Fprintf(w, "    <th>MySQL server address: "+dbAddress+"</th>")
+		fmt.Fprintf(w, "  </tr>")
+		fmt.Fprintf(w, "  <tr>")
+		if dbTls == "false" {
+			fmt.Fprintf(w, "<th>The connection between the MySQL server<br>and Table View is not encrypted &#128308</th>")
+		} else if dbTls == "true" {
+			fmt.Fprintf(w, "<th>The connection between the MySQL server<br>and Table View is encrypted &#128994</th>")
+		}
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "</table>")
 		fmt.Fprintf(w, "<br>")
@@ -360,8 +405,9 @@ func main() {
 		if dbName == "" {
 			fmt.Fprintf(w, endHTML)
 		} else if validDbName == true {
+
 			// Open database connection
-			dbConnection, err := sql.Open("mysql", dbUsername+":"+dbPassword+"@"+dbTransport+"("+dbAddress+":"+dbPort+")/"+dbName)
+			dbConnection, err := sql.Open("mysql", dbUsername+":"+dbPassword+"@"+dbTransport+"("+dbAddress+":"+dbPort+")/"+dbName+"?tls="+dbTls)
 			defer dbConnection.Close()
 
 			// Error
@@ -407,20 +453,30 @@ func main() {
 			}
 		} else {
 			fmt.Fprintf(w, "<table>")
-		        fmt.Fprintf(w, "  <tr>")
-		        fmt.Fprintf(w, "    <th><h1>&nbsp &nbsp DATABASE DOES NOT EXIST &nbsp &nbsp</h1></th>")
-		        fmt.Fprintf(w, "  </tr>")
-		        fmt.Fprintf(w, "</table>")
+			fmt.Fprintf(w, "  <tr>")
+			fmt.Fprintf(w, "    <th><h1>&nbsp &nbsp DATABASE DOES NOT EXIST &nbsp &nbsp</h1></th>")
+			fmt.Fprintf(w, "  </tr>")
+			fmt.Fprintf(w, "</table>")
 			fmt.Fprintf(w, endHTML)
 		}
 	})
 
 	tvPort := os.Getenv("tvPort")
-	addressPort := "localhost:" + tvPort
-	fmt.Println("Table View is running on port " + addressPort)
+	tvPortInt, err := strconv.Atoi(tvPort)
 
-	// Start server on port specified above
-	log.Fatal(http.ListenAndServe(addressPort, nil))
+	if err != nil {
+		panic("TABLE VIEW PORT MUST BE A NUMBER IN /usr/local/etc/tableview-resource/tableview.env")
+	}
+
+	if tvPortInt <= 1023 || tvPortInt >= 49152 {
+		panic("TABLE VIEW LISTENING PORT MUST BE IN THE NUMBER RANGE 1024-49151 IN /usr/local/etc/tableview-resource/tableview.env")
+	} else {
+		addressPort := "localhost:" + tvPort
+		fmt.Println("Table View is running on port " + addressPort)
+
+		// Start server on port specified above
+		log.Fatal(http.ListenAndServe(addressPort, nil))
+	}
 }
 
 // Contributor(s):
