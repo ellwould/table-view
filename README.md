@@ -29,12 +29,6 @@ View demo of Table View at: https://table.ell.today
 
 <br>
 
-## Infomation about a table:
-
-![image](https://github.com/Ellwould/table-view/blob/main/image/table-info.jpeg)
-
-<br>
-
 ## Filtering a table:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/filter-table.jpeg)
