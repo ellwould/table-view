@@ -13,31 +13,31 @@ View demo of Table View at: https://table.ell.today
 
 ## Default drop down:
 
-![image](https://github.com/Ellwould/table-view/blob/main/image/default.jpg)
+![image](https://github.com/Ellwould/table-view/blob/main/image/default.jpeg)
 
 <br>
 
 ## Selecting a database:
 
-![image](https://github.com/Ellwould/table-view/blob/main/image/select-database.jpg)
+![image](https://github.com/Ellwould/table-view/blob/main/image/select-database.jpeg)
 
 <br>
 
 ## List of tables inside the database selected:
 
-![image](https://github.com/Ellwould/table-view/blob/main/image/table-list.jpg)
+![image](https://github.com/Ellwould/table-view/blob/main/image/table-list.jpeg)
 
 <br>
 
 ## Infomation about a table:
 
-![image](https://github.com/Ellwould/table-view/blob/main/image/table-info.jpg)
+![image](https://github.com/Ellwould/table-view/blob/main/image/table-info.jpeg)
 
 <br>
 
 ## Filtering a table:
 
-![image](https://github.com/Ellwould/table-view/blob/main/image/filter-table.jpg)
+![image](https://github.com/Ellwould/table-view/blob/main/image/filter-table.jpeg)
 
 <br>
 
