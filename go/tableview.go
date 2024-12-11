@@ -333,7 +333,7 @@ func main() {
 	} else if dbAddress == "" {
 		panic("DATABASE ADDRESS CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if dbPortInt <= 0 || dbPortInt >= 65536 {
-		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65536 IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65535 IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if dbTls == "" {
 		panic("DATABASE TLS OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if validDbTls == false {
