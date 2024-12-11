@@ -105,7 +105,7 @@ func tableInfo(dbConnection *sql.DB, w http.ResponseWriter, dbName string) {
 	}
 
 	fmt.Fprintf(w, "<br>")
-	fmt.Fprintf(w, "<table>")
+	fmt.Fprintf(w, "<table id=\"tableInformation\">")
 	fmt.Fprintf(w, "  <tr>")
 	fmt.Fprintf(w, "    <th><h3>&nbsp &nbsp &nbsp Table Infomation &nbsp &nbsp &nbsp</h3></th>")
 	fmt.Fprintf(w, "  </tr>")
@@ -204,7 +204,7 @@ func showColumn(dbConnection *sql.DB, w http.ResponseWriter, tableName string) {
 	fmt.Fprintf(w, "<table id=\""+tableName+"\">")
 	fmt.Fprintf(w, "  <tr>")
 	fmt.Fprintf(w, "    <th><h3>&nbsp &nbsp &nbsp Column Infomation for Table &nbsp &nbsp &nbsp<br>&nbsp &nbsp &nbsp"+tableName+"&nbsp &nbsp &nbsp</h3></th>")
-	fmt.Fprintf(w, "    <th>&nbsp &nbsp &nbsp<a href=\"/#\" class=\"tableButton\">&#11014</a>&nbsp &nbsp &nbsp</td>")
+	fmt.Fprintf(w, "    <th>&nbsp &nbsp &nbsp<a href=\"/#tableInformation\" class=\"tableButton\">&#11014</a>&nbsp &nbsp &nbsp</td>")
 	fmt.Fprintf(w, "  </tr>")
 
 	for result1.Next() {
@@ -333,7 +333,7 @@ func main() {
 	} else if dbAddress == "" {
 		panic("DATABASE ADDRESS CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if dbPortInt <= 0 || dbPortInt >= 65536 {
-		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65535 IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65536 IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if dbTls == "" {
 		panic("DATABASE TLS OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
 	} else if validDbTls == false {
