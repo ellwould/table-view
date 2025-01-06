@@ -358,7 +358,7 @@ func main() {
 		fmt.Fprintf(w, "    <th><a href=\"https://ell.today\" class=\"tableButton externalButton\">Written by Elliot Keavney (Website)</a></th>")
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "  <tr>")
-		fmt.Fprintf(w, "    <th><a href=\"https://github.com/Ellwould/table-view\" class=\"tableButton externalButton\">Table View GitHub (Source Code)</a></th>")
+		fmt.Fprintf(w, "    <th><a href=\"https://github.com/Ellwould/table-view\" class=\"tableButton externalButton\">Table View Source Code (GitHub)</a></th>")
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "</table>")
 		fmt.Fprintf(w, "<br>")
