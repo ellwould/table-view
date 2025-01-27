@@ -1,5 +1,6 @@
 [Unit]
 Description=Table View
+After=mysql.service
 
 [Service]
 User=tableview
