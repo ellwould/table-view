@@ -295,7 +295,7 @@ func showColumn(dbConnection *sql.DB, w http.ResponseWriter, tableName string) {
 
 func main() {
 
-	err := godotenv.Load("/usr/local/etc/tableview-resource/tableview.env")
+	err := godotenv.Load("/etc/tableview/tableview.env")
 	if err != nil {
 		panic("Error loading tableview.env file for database details")
 	}
@@ -314,7 +314,7 @@ func main() {
 
 	dbPortInt, err := strconv.Atoi(dbPort)
 	if err != nil {
-		panic("DATABASE PORT MUST BE A NUMBER IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE PORT MUST BE A NUMBER IN /etc/tableview/tableview.env")
 	}
 
 	//Values allowed for dbTls Variable
@@ -323,21 +323,21 @@ func main() {
 
 	//Catch if any errors were made in tableview.env and feed back where to correct error
 	if dbUsername == "" {
-		panic("DATABASE USERNAME CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE USERNAME CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if dbPassword == "" {
-		panic("DATABASE PASSOWRD CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE PASSOWRD CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if dbTransport == "" {
-		panic("DATABASE TRANSPORT OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE TRANSPORT OPTION CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if validDbTransport == false {
-		panic("DATABASE TRANSPORT OPTION MUST BE udp OR tcp IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE TRANSPORT OPTION MUST BE udp OR tcp IN /etc/tableview/tableview.env")
 	} else if dbAddress == "" {
-		panic("DATABASE ADDRESS CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE ADDRESS CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if dbPortInt <= 0 || dbPortInt >= 65536 {
-		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65535 IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65535 IN /etc/tableview/tableview.env")
 	} else if dbTls == "" {
-		panic("DATABASE TLS OPTION CANNOT BE BLANK IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE TLS OPTION CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if validDbTls == false {
-		panic("DATABASE TRANSPORT OPTION MUST BE false OR true IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("DATABASE TRANSPORT OPTION MUST BE false OR true IN /etc/tableview/tableview.env")
 	}
 
 	databaseListResult := databaseList(dbUsername, dbPassword, dbTransport, dbAddress, dbPort, dbTls)
@@ -358,7 +358,7 @@ func main() {
 		fmt.Fprintf(w, "    <th><a href=\"https://ell.today\" class=\"tableButton externalButton\">Written by Elliot Keavney (Website)</a></th>")
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "  <tr>")
-		fmt.Fprintf(w, "    <th><a href=\"https://github.com/Ellwould/table-view\" class=\"tableButton externalButton\">Table View Source Code (GitHub)</a></th>")
+		fmt.Fprintf(w, "    <th><a href=\"https://github.com/ellwould/table-view\" class=\"tableButton externalButton\">Table View Source Code (GitHub)</a></th>")
 		fmt.Fprintf(w, "  </tr>")
 		fmt.Fprintf(w, "</table>")
 		fmt.Fprintf(w, "<br>")
@@ -462,17 +462,17 @@ func main() {
 	tvPortInt, err := strconv.Atoi(tvPort)
 
 	if err != nil {
-		panic("TABLE VIEW PORT MUST BE A NUMBER IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("TABLE VIEW PORT MUST BE A NUMBER IN /etc/tableview/tableview.env")
 	}
 
 	if tvPortInt <= 1023 || tvPortInt >= 49152 {
-		panic("TABLE VIEW LISTENING PORT MUST BE IN THE NUMBER RANGE 1024-49151 IN /usr/local/etc/tableview-resource/tableview.env")
+		panic("TABLE VIEW LISTENING PORT MUST BE IN THE NUMBER RANGE 1024-49151 IN /etc/tableview/tableview.env")
 	} else {
-		addressPort := "localhost:" + tvPort
-		fmt.Println("Table View is running on port " + addressPort)
+		socket := "localhost:" + tvPort
+		fmt.Println("Table View is running on port " + socket)
 
 		// Start server on port specified above
-		log.Fatal(http.ListenAndServe(addressPort, nil))
+		log.Fatal(http.ListenAndServe(socket, nil))
 	}
 }
 
