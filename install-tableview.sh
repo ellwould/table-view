@@ -35,9 +35,16 @@ systemctl daemon-reload;
 
 #----------------------------------------------------------------------
 
+# Install wget
+
+apt update;
+apt install wget;
+
+#----------------------------------------------------------------------
+
 # Remove any previous version of Go, download and install Go 1.24.5
 
-wget https://go.dev/dl/go1.24.5.linux-amd64.tar.gz;
+wget -P https://go.dev/dl/go1.24.5.linux-amd64.tar.gz;
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz;
 export PATH=$PATH:/usr/local/go/bin;
 
