@@ -21,7 +21,7 @@ cd /root;
 if [ ! -d "/root/table-view" ]
 then
   printf "\nDirectory table-view does not exist in /root.\n";
-  printf "Please run commands: \"cd /root; git clone https://github.com/Ellwould/table-view\"\n";
+  printf "Please run commands: \"cd /root; git clone https://github.com/ellwould/table-view\"\n";
   printf "and run install script again\n\n";
   exit;
 fi;
@@ -35,35 +35,30 @@ systemctl daemon-reload;
 
 #----------------------------------------------------------------------
 
-# Remove any previous version of Go, download and install Go 1.23.3
+# Remove any previous version of Go, download and install Go 1.24.5
 
-wget -P /root https://go.dev/dl/go1.23.3.linux-amd64.tar.gz;
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz;
+wget https://go.dev/dl/go1.24.5.linux-amd64.tar.gz;
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz;
+export PATH=$PATH:/usr/local/go/bin;
 
 #----------------------------------------------------------------------
 
 # Create HTML/CSS directory and copy HTML/CSS start and end file
 
-mkdir /usr/local/etc/tableview-resource;
-cp /root/table-view/html-css/tableview-start.html /usr/local/etc/tableview-resource/;
-cp /root/table-view/html-css/tableview-end.html /usr/local/etc/tableview-resource/;
+mkdir -p /etc/tableview/html-css;
+cp /root/table-view/html-css/* /etc/tableview/html-css/;
 
-# Copy /root/table-view/env/tableview.env into /usr/local/etc/tableview-resource
+# Copy /root/table-view/env/tableview.env into /etc/tableview
 
-cp /root/table-view/env/tableview.env /usr/local/etc/tableview-resource/tableview.env;
+cp /root/table-view/env/tableview.env /etc/tableview/tableview.env;
 
 # Create Go directories in root home directory
 
 mkdir -p /root/go/{bin,pkg,src/tableview};
 
-# Create tableviewresource Go directory
-
-mkdir /usr/local/go/src/tableviewresource;
-
 # Copy Go source code
 
 cp /root/table-view/go/tableview.go /root/go/src/tableview/tableview.go;
-cp /root/table-view/go/tableviewresource.go /usr/local/go/src/tableviewresource/tableviewresource.go;
 
 # Create Go mod for tableview
 
@@ -92,8 +87,10 @@ mv /root/go/src/tableview/tableview /usr/local/bin/tableview;
 # Change tableviewresource file permissions, owner and group
 
 chown -R root:tableview /usr/local/etc/tableview-resource;
-chmod 050 /usr/local/etc/tableview-resource;
-chmod 040 /usr/local/etc/tableview-resource/*;
+chmod 050 /etc/tableview;
+chmod 040 /etc/tableview/tableview.env;
+chmod 050 /etc/tableview/html-css;
+chmod 040 /etc/tableview/html-css/*;
 
 # Enable tableview on boot
 
@@ -101,5 +98,5 @@ systemctl enable tableview;
 
 #----------------------------------------------------------------------
 
-printf "\nUpdate database details in /usr/local/etc/tableview-resource/tableview.env\n";
+printf "\nUpdate database details in /etc/tableview/tableview.env\n";
 printf "\nThen to start Table View run: systemctl start tableview\n";
