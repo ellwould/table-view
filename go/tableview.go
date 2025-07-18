@@ -30,6 +30,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	"github.com/ellwould/csvcell"
+	"github.com/go-playground/validator/v10"
 	"log"
 	"net/http"
 	"os"
@@ -321,6 +322,9 @@ func main() {
 	var allowedTransportValue = []string{"tcp", "udp"}
 	validDbTransport := slices.Contains(allowedTransportValue, dbTransport)
 
+        validateDbAddress := validator.New()
+	validateDbAddressErr := validateDbAddress.Var(dbAddress, "required,ip_addr")
+	
 	dbPortInt, err := strconv.Atoi(dbPort)
 	if err != nil {
 		panic("DATABASE PORT MUST BE A NUMBER IN /etc/tableview/tableview.env")
@@ -339,8 +343,8 @@ func main() {
 		panic("DATABASE TRANSPORT OPTION CANNOT BE BLANK IN /etc/tableview/tableview.env")
 	} else if validDbTransport == false {
 		panic("DATABASE TRANSPORT OPTION MUST BE udp OR tcp IN /etc/tableview/tableview.env")
-	} else if dbAddress == "" {
-		panic("DATABASE ADDRESS CANNOT BE BLANK IN /etc/tableview/tableview.env")
+	} else if validateDbAddressErr != nil && dbAddress != "localhost" {
+		panic("DATABASE ADDRESS MUST BE A VALID INTERENT PROTOCOL (IP) ADDRESS OR localhost IN /etc/tableview/tableview.env")
 	} else if dbPortInt <= 0 || dbPortInt >= 65536 {
 		panic("DATABASE PORT MUST BE IN THE NUMBER RANGE 1-65535 IN /etc/tableview/tableview.env")
 	} else if dbTls == "" {
@@ -471,10 +475,18 @@ func main() {
 		panic("TABLE VIEW PORT MUST BE A NUMBER IN /etc/tableview/tableview.env")
 	}
 
+	tvAddress := os.Getenv("tvAddress")
+	validateTvAddress := validator.New()
+	validateTvAddressErr := validateTvAddress.Var(tvAddress, "required,ip_addr")
+
 	if tvPortInt <= 1023 || tvPortInt >= 49152 {
 		panic("TABLE VIEW LISTENING PORT MUST BE IN THE NUMBER RANGE 1024-49151 IN /etc/tableview/tableview.env")
+	} else if validateTvAddressErr != nil && tvAddress != "localhost" {
+                panic("TABLE VIEW ADDRESS MUST BE A VALID INTERENT PROTOCOL (IP) ADDRESS OR localhost IN /etc/tableview/tableview.env")
+	} else if dbAddress == tvAddress && dbPort == tvPort {
+                panic("TABLE VIEW ADDRESS & PORT NUMBER CANNOT BE THE SAME AS DATABASE ADDRESS & PORT NUMBER IN /etc/tableview/tableview.env")
 	} else {
-		socket := "localhost:" + tvPort
+		socket := tvAddress + ":" + tvPort
 		fmt.Println("Table View is running on port " + socket)
 
 		// Start server on port specified above
