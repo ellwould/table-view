@@ -89,11 +89,11 @@ usermod -L tableview;
 
 chown root:tableview /root/go/src/tableview/tableview;
 chmod 050 /root/go/src/tableview/tableview;
-mv /root/go/src/tableview/tableview /usr/local/bin/tableview;
+mv /root/go/src/tableview/tableview /usr/bin/tableview;
 
 # Change tableviewresource file permissions, owner and group
 
-chown -R root:tableview /usr/local/etc/tableview-resource;
+chown -R root:tableview /etc/tableview;
 chmod 050 /etc/tableview;
 chmod 040 /etc/tableview/tableview.env;
 chmod 050 /etc/tableview/html-css;
