@@ -29,13 +29,22 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"github.com/ellwould/csvcell"
 	"log"
 	"net/http"
 	"os"
 	"slices"
 	"strconv"
-	"tableviewresource"
 )
+
+// Constant for directory path that contains the files tableview-start.html and tableview-end.html
+const dirHTML string = "/etc/tableview/html-css"
+
+// Constant for fileStartHTML file
+const fileStartHTML string = "tableview-start.html"
+
+// Constant for fileEndHTML file
+const fileEndHTML string = "tableview-end.html"
 
 // Function to retrieve databases inside MySQL
 func databaseList(dbUsername string, dbPassword string, dbTransport string, dbAddress string, dbPort string, dbTls string) []string {
@@ -342,11 +351,8 @@ func main() {
 
 	databaseListResult := databaseList(dbUsername, dbPassword, dbTransport, dbAddress, dbPort, dbTls)
 
-	var startHTML string
-	startHTML = tableviewresource.StartHTML()
-
-	var endHTML string
-	endHTML = tableviewresource.EndHTML()
+	startHTML := csvcell.FileData(dirHTML, fileStartHTML)
+	endHTML := csvcell.FileData(dirHTML, fileEndHTML)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
