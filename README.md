@@ -11,6 +11,14 @@ View demo of Table View at: https://table.ell.today
 
 <br>
 
+## Adding Self Signed Certificates:
+
+- cp [CA certificate for MariaDB Server] /usr/local/share/ca-certificates/;
+
+- update-ca-certificates;
+
+<br>
+
 ## Default drop down:
 
 ![image](https://github.com/Ellwould/table-view/blob/main/image/default.jpeg)
