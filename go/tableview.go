@@ -360,6 +360,10 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
+        if err := r.ParseForm(); err != nil {
+			fmt.Fprintf(w, "ParseForm() err: %v", err)
+		}
+		
 		fmt.Fprintf(w, startHTML)
 		fmt.Fprintf(w, "<br>")
 		fmt.Fprintf(w, "<br>")
